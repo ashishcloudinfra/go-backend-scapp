@@ -1,0 +1,9 @@
+services:
+  scapp-server:
+    build: .
+    volumes:
+      - /Users/shivam.kumar2@avalara.com/Documents/simplifyconftrol/scapp/server/secrets.json:/app/secrets.json
+    ports:
+      - "80:8080"
+    environment:
+      - ENV=local

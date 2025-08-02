@@ -1,0 +1,7 @@
+include:
+  - local: gitlab/**/*.yml
+  - local: gitlab/*.yml
+
+workflow:
+  rules:
+    - !reference [".rules:workflow", rules]

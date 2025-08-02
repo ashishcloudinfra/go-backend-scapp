@@ -1,0 +1,12 @@
+.rules:workflow:
+  rules:
+    - !reference [".rules:mr-to-default-branch", rules]
+    - !reference [".rules:develop-refs", rules]
+
+.rules:mr-to-default-branch:
+  rules:
+    - if: $CI_MERGE_REQUEST_IID && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == $CI_DEFAULT_BRANCH
+
+.rules:develop-refs:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH

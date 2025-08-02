@@ -1,0 +1,18 @@
+drop table if exists company;
+
+CREATE TABLE company (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  contact VARCHAR(15) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  state VARCHAR(100) NOT NULL,
+  country VARCHAR(100) NOT NULL,
+  pincode VARCHAR(10) NOT NULL,
+  type VARCHAR(100) NOT NULL,
+  isDefault BOOLEAN NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  iamId UUID NOT NULL REFERENCES iam(id) ON DELETE CASCADE
+);

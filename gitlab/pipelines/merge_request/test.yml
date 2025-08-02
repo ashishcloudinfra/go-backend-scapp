@@ -1,0 +1,24 @@
+.server:test:
+  stage: test
+  image: ${GO_IMG}
+  rules:
+    - !reference [".rules:mr-to-default-branch", rules]
+    - !reference [".rules:develop-refs", rules]
+  script:
+    - cd server
+    - go mod tidy
+    - go test -v ./tests
+  when: manual
+
+.client:test:
+  stage: test
+  image: ${NODE_IMG}
+  rules:
+    - !reference [".rules:mr-to-default-branch", rules]
+    - !reference [".rules:develop-refs", rules]
+  script:
+    - cd client
+    # TODO:: REMOVE THIS TRUE WHEN WE HAVE TEST CASES
+    - npm run test || true
+  needs:
+    - client:install

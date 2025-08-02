@@ -1,0 +1,20 @@
+server:deploy:
+  stage: deploy
+  image: ubuntu:latest
+  before_script:
+    - apt-get update -y && apt-get install -y openssh-client rsync
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - ssh-keyscan -H "$EC2_IP" >> ~/.ssh/known_hosts
+  script:
+    - export PROJECT_DIR=go-with-nginx
+    - cd deployment
+    - echo -e "CONTAINER_IMAGE=$CONTAINER_IMAGE\nDOMAIN=$DOMAIN\nCERTBOT_EMAIL=$CERTBOT_EMAIL" > .env
+    - rsync -avz .env ec2-user@$EC2_IP:~/$PROJECT_DIR/
+    - rsync -avz --exclude='.git' ./ ec2-user@$EC2_IP:~/$PROJECT_DIR/
+    - ssh ec2-user@$EC2_IP "cd ~/$PROJECT_DIR && chmod +x deploy.sh generate_nginx_config.sh && ./deploy.sh go"
+  needs:
+    - server:push
+  only:
+    - main
